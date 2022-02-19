@@ -13,9 +13,9 @@ Product.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: True
+      autoIncrement: True,
     },
-    product_name: { 
+    product_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -23,20 +23,30 @@ Product.init(
       type: DataTypes.DECIMAL,
       allowNull: false,
       // TO-DO: VALIDATES THAT THE VALUE IS A DECIMAL
+      // Is the below correct?
       validate: {
         isDecimal: true,
-      }
+      },
     },
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
       // TO-DO: SET DEFAULT VALUE OF 10
       // VALIDATES THAT THE VALUE IS NUMERIC
+      // Is this correct?
+      validate: {
+        isNumeric: true,
+      },
     },
     category_id: {
       type: DataTypes.INTEGER,
       // TO-DO: REFERENCES THE CATEGORY MODEL'S ID
-    }
+      // Is the below correct?
+      references: {
+        model: 'category',
+        key: 'id',
+      },
+    },
   },
   {
     sequelize,
