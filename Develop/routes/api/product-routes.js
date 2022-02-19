@@ -6,22 +6,19 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', (req, res) => {
   // find all products
-  Product.findAll()
+  Product.findAll({
+    include: [
+      Category,
+      {
+        model: Tag,
+        through: ProductTag,
+      },
+    ],
+  })
     .then((dbProductData) => res.json(dbProductData))
     .catch((err) => {
       res.status(500).json(err);
     });
-  // be sure to include its associated Category and Tag data
-  include: [
-    {
-      model: Category,
-      attributes: ['category_name'],
-    },
-    {
-      model: Tag,
-      attributes: ['tag_name'],
-    },
-  ];
 });
 
 // get one product
@@ -29,6 +26,13 @@ router.get('/:id', (req, res) => {
   // find a single product by its `id`
   Product.findOne({
     where: { id: req.params.id },
+    include: [
+      Category,
+      {
+        model: Tag,
+        through: ProductTag,
+      },
+    ],
   })
     .then((dbProductData) => {
       if (!dbProductData) {
@@ -41,17 +45,6 @@ router.get('/:id', (req, res) => {
       console.log(err);
       res.status(500).json(err);
     });
-  // be sure to include its associated Category and Tag data
-  include: [
-    {
-      model: Category,
-      attributes: ['category_name'],
-    },
-    {
-      model: Tag,
-      attributes: ['tag_name'],
-    },
-  ];
 });
 
 // create new product
@@ -61,6 +54,7 @@ router.post('/', (req, res) => {
       product_name: "Basketball",
       price: 200.00,
       stock: 3,
+      WHEN TESTING BE SURE TO INCLUDE THE BELOW PROPERTY
       tagIds: [1, 2, 3, 4]
     }
   */
